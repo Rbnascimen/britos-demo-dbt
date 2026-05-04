@@ -3,7 +3,6 @@ version: 2
 sources:
   - name: sales
     description: "Tabelas operacionais de vendas (bronze layer, ingeridas via Brito's Data ingestion engine)"
-    database: lakehouse
     schema: bronze
     
     tables:
