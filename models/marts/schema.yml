@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: faturamento_diario
+    description: "Faturamento liquido agregado por dia e canal."
+    columns:
+      - name: data_venda
+        description: "Data do pedido"
+        data_tests:
+          - not_null
+      - name: canal
+        description: "Canal de venda (web/mobile/marketplace)"
+        data_tests:
+          - not_null
+      - name: faturamento_liquido
+        description: "Soma de valor_total dos pedidos pagos+ no dia"
+        data_tests:
+          - not_null
+      - name: ticket_medio
+        description: "Faturamento / total_pedidos"
+
+  - name: top_clientes
+    description: "Top 1000 clientes por faturamento nos ultimos 12 meses."
+    columns:
+      - name: id_cliente
+        description: "PK do cliente"
+        data_tests:
+          - not_null
+          - unique
+      - name: faturamento_total
+        description: "Soma do valor de todos pedidos pagos+ do cliente"
+        data_tests:
+          - not_null

@@ -1,0 +1,22 @@
+name: 'britos_demo'
+version: '1.0.0'
+config-version: 2
+
+profile: 'britos_demo'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+models:
+  britos_demo:
+    staging:
+      +materialized: view
+      +schema: silver
+    marts:
+      +materialized: table
+      +schema: gold

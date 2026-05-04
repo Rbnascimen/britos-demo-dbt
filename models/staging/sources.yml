@@ -1,0 +1,60 @@
+version: 2
+
+sources:
+  - name: sales
+    description: "Tabelas operacionais de vendas (bronze layer, ingeridas via Brito's Data ingestion engine)"
+    database: lakehouse
+    schema: bronze
+    
+    tables:
+      - name: vendas
+        identifier: sales.vendas
+        description: "Pedidos de venda — header do pedido"
+        columns:
+          - name: id_venda
+            description: "PK do pedido"
+            data_tests:
+              - not_null
+              - unique
+          - name: id_cliente
+            description: "FK pro cliente"
+          - name: status
+            description: "Status do pedido (pending/paid/shipped/delivered/cancelled)"
+            data_tests:
+              - accepted_values:
+                  values: ['pending', 'paid', 'shipped', 'delivered', 'cancelled']
+          - name: valor_total
+            description: "Valor total do pedido em BRL"
+            data_tests:
+              - not_null
+          - name: dh_pedido
+            description: "Timestamp da criação do pedido"
+            
+      - name: vendas_itens
+        identifier: sales.vendas_itens
+        description: "Itens de cada venda (1:N com vendas)"
+        columns:
+          - name: id_venda_item
+            description: "PK do item"
+            data_tests:
+              - not_null
+              - unique
+          - name: id_venda
+            description: "FK pra venda"
+            data_tests:
+              - not_null
+              - relationships:
+                  to: source('sales', 'vendas')
+                  field: id_venda
+          - name: id_produto
+            description: "FK pro produto"
+            data_tests:
+              - not_null
+          - name: quantidade
+            description: "Qtd vendida"
+            data_tests:
+              - not_null
+          - name: valor_total
+            description: "preco_unitario * quantidade - valor_desconto"
+            data_tests:
+              - not_null
